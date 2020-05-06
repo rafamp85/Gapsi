@@ -4,16 +4,17 @@ import Product from './Product';
 
 const ListProducts = () => {
 
-  const { products } = useContext( ProductsContext );
+  const { products, message } = useContext( ProductsContext );
 
   return (
     <div className="row mt-5">
-      {products.map( product => (
-          <Product
-            key={ product.ID }
-            product={product}
-          />
-      ))}
+      { message !== '' ? <h2>{message}</h2> : null }
+        {products.map( product => (
+            <Product
+              key={ product.ID }
+              product={product}
+            />
+        ))}
     </div>
   )
 

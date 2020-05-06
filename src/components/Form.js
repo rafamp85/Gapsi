@@ -3,7 +3,7 @@ import { ProductsContext } from '../context/ProductsContext';
 
 const Form = () => {
 
-  const { findProduct } = useContext( ProductsContext );
+  const { next, findProduct } = useContext( ProductsContext );
 
   const [ currentpage, saveCurrentPage ] = useState(1);
   const [ search, saveSearch ] = useState({
@@ -25,6 +25,8 @@ const Form = () => {
 
     if (currentpage === 0) return;
 
+    saveCurrentPage(currentpage -1 );
+
     findProduct({
       name,
       page: newCurrentPage
@@ -33,8 +35,6 @@ const Form = () => {
 
   const nextPage = () => {
     const newCurrentPage = currentpage + 1;
-
-    console.log(newCurrentPage);
 
     saveCurrentPage(currentpage + 1);
 
@@ -85,7 +85,7 @@ const Form = () => {
               >&laquo; Anterior</button>
             )}
 
-            {(name === '') ? null : (
+            {( !next ) ? null : (
                 <button
                   type="button"
                   className="btn btn-info"

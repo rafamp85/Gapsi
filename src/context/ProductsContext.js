@@ -6,6 +6,8 @@ export const ProductsContext = createContext();
 const ProductsProvider = ( props ) => {
 
   const [ products, saveProducts ] = useState([]);
+  const [ next, isNext ] = useState(false);
+  const [ message, saveMessage ] = useState('');
   const [ search, findProduct ] = useState({
     name: '',
     page: '1'
@@ -14,11 +16,23 @@ const ProductsProvider = ( props ) => {
   const { name, page } = search;
 
   useEffect( () => {
-    console.log(name);
     const getProducts = async () => {
+
+      if ( !name ) {
+        return;
+      }
       const urlProducts = `https://node-red-nxdup.mybluemix.net/productos/${name}/${page}`;
       const products = await axios.get(urlProducts);
 
+      if ( products.data.message ) {
+        isNext(false);
+        saveMessage( products.data.message );
+        saveProducts([]);
+        return;
+      }
+
+      isNext(true);
+      saveMessage('');
       saveProducts(products.data.data.products);
     };
 
@@ -30,6 +44,9 @@ const ProductsProvider = ( props ) => {
     <ProductsContext.Provider
         value={{
           products,
+          next,
+          message,
+          saveMessage,
           findProduct
         }}
     >
